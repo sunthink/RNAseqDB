@@ -17,7 +17,7 @@ outTpmFilePath    <- paste(outFilePref, '.tpm',   sep = '');
 fCountsList = featureCounts(bamFile, annot.ext=gtfFile, isGTFAnnotationFile=TRUE, nthreads=nthreads, isPairedEnd=TRUE)
 dgeList = DGEList(counts=fCountsList$counts, genes=fCountsList$annotation)
 fpkm = rpkm(dgeList, dgeList$genes$Length)
-tpm = exp(log(fpkm) - log(sum(fpkm)) + log(1e6))
+tpm = t(t(fpkm)*1e6/(colSums(fpkm)))
 
 write.table(fCountsList$stat, outStatsFilePath, sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE)
 
